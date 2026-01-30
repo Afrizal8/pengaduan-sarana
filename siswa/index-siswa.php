@@ -29,6 +29,25 @@ $siswa = $_SESSION['siswa'];
     </div>
   </nav>
 
+  <div class="container mt-4">
+    <div class="card shadow-sm">
+      <div class="card-body">
+        <h5>Anda login dengan NIS: <?= $siswa['nis']; ?></h5>
+        <p> Kelas: <b><?= $siswa['kelas']; ?></b>
+        </p>
+        <hr>
+        <a href="input-pengaduan.php" class="btn btn-success">
+          <i class="fa-solid fa-plus"></i> Buat pengaduan
+        </a>
+        <a href="riwayat-pengaduan.php" class="btn btn-warning">
+          <i class="fa-solid fa-plus"></i> Riwayat pengaduan
+        </a>
+
+
+      </div>
+    </div>
+  </div>
+
   <script src="../assets/bootstrap/js/bootstrap.bundle.min.js"></script>
 </body>
 </html>
