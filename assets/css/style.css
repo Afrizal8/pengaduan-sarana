@@ -1,0 +1,14 @@
+body {
+  background-color: #ffffff;
+}
+
+.hero {
+  min-height: 100vh;
+  display: flex;
+  align-items: center;
+}
+
+.icon-box {
+  font-size: 50px;
+  color: #0d6efd;
+}
