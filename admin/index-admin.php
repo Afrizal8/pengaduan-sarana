@@ -72,7 +72,7 @@ if (!isset($_SESSION['admin'])) {
             <p class="text-muted">
               Kelola kategori sarana
             </p>
-            <a href="data-pengaduan.php" class="btn btn-primary">
+            <a href="data-kategori.php" class="btn btn-primary">
               Kelola
             </a>
           </div>
@@ -88,8 +88,8 @@ if (!isset($_SESSION['admin'])) {
             <p class="text-muted">
               Kelola akun siswa
             </p>
-            <a href="data-pengaduan.php" class="btn btn-primary">
-              Tambah siswa
+            <a href="data-siswa.php" class="btn btn-primary">
+              Kelola
             </a>
           </div>
         </div>
@@ -104,7 +104,7 @@ if (!isset($_SESSION['admin'])) {
             <p class="text-muted">
               Lihat dan kelola pengaduan siswa
             </p>
-            <a href="data-pengaduan.php" class="btn btn-primary">
+            <a href="laporan.php" class="btn btn-primary">
               Kelola
             </a>
           </div>

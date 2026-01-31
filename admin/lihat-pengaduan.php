@@ -26,7 +26,7 @@ $query = mysqli_query(
     k.ket_kategori,
     ia.lokasi,
     ia.ket,
-    IFNULL(a.status, 'menunggu') AS status,
+    IFNULL(a.status, 'Menunggu') AS status,
     IFNULL(a.feedback, '') AS feedback
   FROM input_aspirasi ia
   JOIN siswa s ON ia.nis = s.nis
@@ -59,7 +59,7 @@ if (!$data) {
 <nav class="navbar navbar-expand-lg navbar-dark bg-primary">
   <div class="container-fluid">
     <span class="navbar-brand fw-bold">
-      <i class="fa-solid fa-school"></i> SIPASIS -Admin
+      <i class="fa-solid fa-school"></i> SIPASIS - Admin
     </span>
 
     <div class="d-flex">
@@ -77,12 +77,33 @@ if (!$data) {
 </nav>
 
 <div class="container mt-4">
+  <?php
+  // Display success message
+  if (isset($_SESSION['success'])) {
+    echo '<div class="alert alert-success alert-dismissible fade show" role="alert">
+            <i class="fa-solid fa-check-circle"></i> ' . $_SESSION['success'] . '
+            <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+          </div>';
+    unset($_SESSION['success']);
+  }
+  
+  // Display error message
+  if (isset($_SESSION['error'])) {
+    echo '<div class="alert alert-danger alert-dismissible fade show" role="alert">
+            <i class="fa-solid fa-exclamation-circle"></i> ' . $_SESSION['error'] . '
+            <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+          </div>';
+    unset($_SESSION['error']);
+  }
+  ?>
+
   <div class="card shadow-sm">
     <div class="card-header bg-primary text-white">
-      <h5 class="mb-0">Detail Pengaduan</h5>
+      <h5 class="mb-0"><i class="fa-solid fa-file-lines"></i> Detail Pengaduan</h5>
     </div>
 
     <div class="card-body">
+      <h6 class="mb-3 text-primary"><i class="fa-solid fa-info-circle"></i> Informasi Pelapor</h6>
       <table class="table table-bordered">
         <tr>
           <th width="30%">NIS</th>
@@ -94,7 +115,7 @@ if (!$data) {
         </tr>
         <tr>
           <th>Kategori</th>
-          <td><?= $data['ket_kategori']; ?></td>
+          <td><span class="badge bg-info"><?= $data['ket_kategori']; ?></span></td>
         </tr>
         <tr>
           <th>Lokasi</th>
@@ -102,31 +123,45 @@ if (!$data) {
         </tr>
         <tr>
           <th>Keterangan</th>
-          <td><?= $data['ket']; ?></td>
+          <td><?= nl2br(htmlspecialchars($data['ket'])); ?></td>
         </tr>
       </table>
 
-      <form method="post" action="update-pengaduan.php">
+      <hr class="my-4">
+
+      <h6 class="mb-3 text-primary"><i class="fa-solid fa-pen-to-square"></i> Update Status & Feedback</h6>
+      <form method="post" action="update-pengaduan.php" id="updateForm">
         <input type="hidden" name="id_pelaporan" value="<?= $data['id_pelaporan']; ?>">
-        <input type="hidden" name="id_kategori" value="<?= $data['id_kategori']; ?>">
 
         <div class="mb-3">
-          <label class="form-label"><strong>Status Pengaduan</strong></label>
+          <label class="form-label"><strong>Status Pengaduan <span class="text-danger">*</span></strong></label>
           <select name="status" class="form-select" required>
-            <option value="menunggu" <?= ($data['status'] == 'menunggu') ? 'selected' : ''; ?>>Menunggu</option>
-            <option value="proses" <?= ($data['status'] == 'proses') ? 'selected' : ''; ?>>Proses</option>
-            <option value="selesai" <?= ($data['status'] == 'selesai') ? 'selected' : ''; ?>>Selesai</option>
+            <option value="Menunggu" <?= ($data['status'] == 'Menunggu') ? 'selected' : ''; ?>>
+              <i class="fa-solid fa-clock"></i> Menunggu
+            </option>
+            <option value="Proses" <?= ($data['status'] == 'Proses') ? 'selected' : ''; ?>>
+              <i class="fa-solid fa-spinner"></i> Proses
+            </option>
+            <option value="Selesai" <?= ($data['status'] == 'Selesai') ? 'selected' : ''; ?>>
+              <i class="fa-solid fa-check"></i> Selesai
+            </option>
           </select>
+          <small class="text-muted">Pilih status pengaduan saat ini</small>
         </div>
 
         <div class="mb-3">
-          <label class="form-label">Feedback</label>
-          <textarea name="feedback" class="form-control" rows="3"><?= $data['feedback']; ?></textarea>
+          <label class="form-label"><strong>Feedback</strong></label>
+          <textarea name="feedback" class="form-control" rows="4" placeholder="Masukkan tanggapan atau feedback untuk pengaduan ini..."><?= htmlspecialchars($data['feedback']); ?></textarea>
+          <small class="text-muted">Berikan tanggapan atau update terkait pengaduan</small>
         </div>
 
         <div class="d-flex justify-content-between">
-          <a href="data-pengaduan.php" class="btn btn-secondary">Kembali</a>
-          <button type="submit" class="btn btn-success" name="simpan">Simpan</button>
+          <a href="data-pengaduan.php" class="btn btn-secondary">
+            <i class="fa-solid fa-arrow-left"></i> Kembali
+          </a>
+          <button type="submit" class="btn btn-success" name="simpan">
+            <i class="fa-solid fa-save"></i> Simpan Perubahan
+          </button>
         </div>
       </form>
     </div>
@@ -134,5 +169,17 @@ if (!$data) {
 </div>
 
 <script src="../assets/bootstrap/js/bootstrap.bundle.min.js"></script>
+<script>
+  // Form validation
+  document.getElementById('updateForm').addEventListener('submit', function(e) {
+    const status = this.querySelector('[name="status"]').value;
+    
+    if (!status) {
+      e.preventDefault();
+      alert('Status pengaduan harus dipilih!');
+      return false;
+    }
+  });
+</script>
 </body>
 </html>
